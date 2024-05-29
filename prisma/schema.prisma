@@ -1,0 +1,81 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_MYSQL_URL")
+  // shadowDatabaseUrl = env("DATABASE_MYSQL_SHADOW_URL")
+}
+
+model GuildAutoVoiceChannelCache {
+  id            Int       @id @default(autoincrement())
+  guild_id      String   
+  channel_id    String    
+  parent_id     String
+  author_id     String
+  create_at     DateTime  @default(now())
+  update_at     DateTime  @updatedAt
+}
+
+model GuildAutoVoiceChannel {
+  id            Int       @id @default(autoincrement())
+  guild_id      String   
+  channel_id    String    
+  author_id     String
+  create_at     DateTime  @default(now())
+  update_at     DateTime  @updatedAt
+}
+
+model GuildDisableCommand {
+  id            Int       @id @default(autoincrement())
+  guild_id      String   
+  command_name  String
+  author_id     String
+  author_name   String
+  create_at     DateTime  @default(now())
+  update_at     DateTime  @updatedAt
+}
+
+model GuildMusicChannel {
+  id                    Int       @id @default(autoincrement())
+  guild_id              String   
+  channel_id            String    
+  author_id             String
+  content_banner_id     String
+  content_queue_id      String
+  content_playing_id    String
+  create_at             DateTime  @default(now())
+  update_at             DateTime  @updatedAt
+}
+
+model GuildCaptcha {
+  id                    Int       @id @default(autoincrement())
+  guild_id              String    
+  new_role_id           String
+  old_role_id           String
+  log_channel_id        String
+  captcha_timeout       Int
+  create_at             DateTime  @default(now())
+  update_at             DateTime  @updatedAt
+}
+
+model UseCommandStatistics {
+  id                    Int       @id @default(autoincrement())
+  author_id             String
+  author_name           String
+  author_global_name    String
+  guild_id              String
+  guild_name            String
+  command_name          String
+  comamnd_description   String
+  preferred_locale      String
+  create_at             DateTime  @default(now())
+  update_at             DateTime  @updatedAt
+}
