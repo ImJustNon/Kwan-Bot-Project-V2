@@ -1,25 +1,28 @@
+import { NodeOption } from "shoukaku";
+
 type ServerConfig = {
-    port: number
+    port: number;
 }
 type ClientConfig = {
-    token: string,
-    id: string,
-    secret: string,
+    token: string;
+    id: string;
+    secret: string;
 }
 type UsersConfig = {
-    admins: Array<string>
-    owners: Array<string>
-    developers: Array<string>
+    admins: Array<string>;
+    owners: Array<string>;
+    developers: Array<string>;
 }
 type APIConfig = {
     
 }
 
 interface Config {
-    server: ServerConfig
-    client: ClientConfig
-    users: UsersConfig
-    api: APIConfig
+    server: ServerConfig;
+    client: ClientConfig;
+    nodes: NodeOption[];
+    users: UsersConfig;
+    api: APIConfig;
 }
 
 export {

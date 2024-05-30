@@ -7,6 +7,7 @@ import fs from "fs";
 import path from "path";
 import { CommandConfig } from "./types/CommandTypes";
 import Main from "./music/main";
+import "@discordjs/voice";
 
 const client: any = new Client({ 
     intents: [
@@ -36,8 +37,6 @@ const client: any = new Client({
     ],
 });
 
-Main(client);
-
 client.commands = new Collection();
 client.modules = fs.readdirSync('./commands');
 
@@ -55,6 +54,6 @@ for (const file of filteredHanderFiles) {
 }
 
 client.login(config.client.token).then(() =>{
-    
+    Main(client);
 });
 

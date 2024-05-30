@@ -12,6 +12,13 @@ const config: Config = {
         id: process.env.CLIENT_ID || "",
         secret: process.env.CLIENT_SECRET || "",
     },
+    nodes: [
+        {
+            name: "Localhost",
+            url: "localhost:6558",
+            auth: "reirin",
+        },
+    ],
     users: {
         admins: [""],
         owners: [""],

@@ -6,5 +6,4 @@ async function Loader(client: ClientParams): Promise<void> {
     console.log("Loaded");
 }
 
-
 export default Loader;

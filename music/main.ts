@@ -1,9 +1,10 @@
 import fs from "fs";
 import path from "path";
 import Loader from "./loader";
-import StartNode from "./manager";
+import StartNode from "./shoukaku";
+import { ClientParams } from "../types/ClientTypes";
 
-async function Main(client: any): Promise<void> {
+async function Main(client: ClientParams): Promise<void> {
     StartNode(client);
     await Loader(client);
 }
