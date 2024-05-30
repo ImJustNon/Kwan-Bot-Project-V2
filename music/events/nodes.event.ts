@@ -10,16 +10,16 @@ function NodesEvent(client: ClientParams): void {
         
     });
     poru?.on("nodeConnect", (node: Node) =>{
-        
+        console.log(`[Nodes] Node ${node.name}: Ready!`);
     });
     poru?.on("nodeDisconnect", (node: Node, event: any) =>{
-        
+        console.log(`[Nodes] Node ${node.name}: Disconnected`);
     });
     poru?.on("nodeReconnect", (node: Node) =>{
-       
+       console.log(`[Nodes] Node ${node.name} is reconnecting`);
     });
     poru?.on("nodeError", (node: Node, event: any) =>{
-        
+        console.log(`[Nodes] Node ${node.name} had an error: ${event}`);
     });
 }
 

@@ -38,8 +38,6 @@ const client: any = new Client({
     ],
 });
 
-StartPlayer(client);
-
 client.commands = new Collection();
 client.modules = fs.readdirSync('./commands');
 
@@ -56,6 +54,7 @@ for (const file of filteredHanderFiles) {
     });
 }
 
-client.login(config.client.token).then(() =>{
+client.login(config.client.token).then(async() =>{
+    await StartPlayer(client);
 });
 

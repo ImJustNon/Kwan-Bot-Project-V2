@@ -17,9 +17,9 @@ function ReadyEvent(client: ClientParams, config: any):void {
         }, 5 * 1000);
 
         // init poru
-        poru?.init();
+        await poru?.init();
 
-        const serverPath = path.join(__dirname, "../server", "app.ts");
+        const serverPath = path.join(__dirname, "../api", "app.ts");
         await import(serverPath);
     });
     

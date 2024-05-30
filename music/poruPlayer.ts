@@ -9,12 +9,12 @@ async function PoruPlayer(client: ClientParams): Promise<void> {
     poru = new Poru(client, config.nodes, {
         library: "discord.js",
         defaultPlatform: "ytsearch",
-        resumeKey: "nonlnwza",
+        resumeKey: "reirin",
         resumeTimeout: 60 * 1000,
-        reconnectTries: 5
+        reconnectTries: 5,
+        autoResume: true
     }) as Poru;
 }
-
 
 export {
     poru
