@@ -1,4 +1,4 @@
-import { NodeOption } from "shoukaku";
+import { NodeGroup } from "poru";
 
 type ServerConfig = {
     port: number;
@@ -20,7 +20,7 @@ type APIConfig = {
 interface Config {
     server: ServerConfig;
     client: ClientConfig;
-    nodes: NodeOption[];
+    nodes: NodeGroup[];
     users: UsersConfig;
     api: APIConfig;
 }

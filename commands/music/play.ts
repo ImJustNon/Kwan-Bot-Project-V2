@@ -1,9 +1,11 @@
 import { Guild, GuildChannel, GuildMember, InteractionResponse } from "discord.js";
 import { CommandCallbackFunction, CommandCallbackFunctionParams, CommandConfig } from "../../types/CommandTypes";
+import { poru } from "../../music/poruPlayer";
+import { Player, Track } from "poru";
 
 const pingCommand: CommandConfig = {
     name: 'play',
-    description: 'เช็ค Ping บอท',
+    description: 'เปิดเพลงฟังในดิสคิอร์ดชิวๆ เย่ๆ',
     type: 1,
     options: [
         {
@@ -53,7 +55,40 @@ const pingCommand: CommandConfig = {
             sourcePrefix = "ytsearch";
         }
 
+        const res = await poru?.resolve({
+            query: query, 
+            source: sourcePrefix, 
+            requester: interaction.member 
+        });
 
+        if (res?.loadType === "error") {
+            return interaction.reply("Failed to load track.");
+        } else if (res?.loadType === "empty") {
+            return interaction.reply("No source found!");
+        }
+
+        const player: Player = poru?.createConnection({
+            guildId: guild.id,
+            voiceChannel: channel.id,
+            textChannel: interaction.channelId,
+            deaf: true,
+        }) as Player;
+
+        if (res?.loadType === "playlist") {
+            for (const track of res?.tracks) {
+                track.info.requester = interaction.user;
+                player?.queue.add(track);
+            }
+    
+            await interaction.reply(`${res?.playlistInfo.name} has been loaded with ${res?.tracks.length}`);
+        } else {
+            const track: Track = res?.tracks[0] as Track;
+            track.info.requester = interaction.user;
+            player?.queue.add(track);
+            await interaction.reply(`Queued Track \n \`${track.info.title}\``);
+        }
+
+        if (!player?.isPlaying && player?.isConnected) player?.play();
     }
 };
 

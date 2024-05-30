@@ -1,7 +1,7 @@
 import fs from "fs";
 import path from "path";
 import Loader from "./loader";
-import StartNode from "./player";
+import StartNode from "./poruPlayer";
 import { ClientParams } from "../types/ClientTypes";
 
 async function Main(client: ClientParams): Promise<void> {

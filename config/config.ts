@@ -14,9 +14,10 @@ const config: Config = {
     },
     nodes: [
         {
-            name: "Localhost",
-            url: "localhost:6558",
-            auth: "reirin",
+            name: "local-node",
+            host: "localhost",
+            port: 6558,
+            password: "reirin",
         },
     ],
     users: {

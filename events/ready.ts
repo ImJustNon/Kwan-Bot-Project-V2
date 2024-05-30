@@ -1,6 +1,7 @@
-import { Client, PresenceStatusData, ActivityType } from "discord.js";
+import { Client, PresenceStatusData, ActivityType, PresenceUpdateStatus } from "discord.js";
 import path from "path";
 import { ClientParams } from "../types/ClientTypes";
+import { poru } from "../music/poruPlayer";
 
 
 function ReadyEvent(client: ClientParams, config: any):void {
@@ -10,13 +11,19 @@ function ReadyEvent(client: ClientParams, config: any):void {
         changeStatus();
         setInterval(() => {
             changeStatus();
-        }, 10 * 1000);
+            setInterval(() =>{
+                changeStatus2();
+            }, 5 * 1000);
+        }, 5 * 1000);
+
+        // init poru
+        poru?.init();
 
         const serverPath = path.join(__dirname, "../server", "app.ts");
-        import(serverPath);
+        await import(serverPath);
     });
     
-    async function changeStatus() {
+    async function changeStatus(): Promise<void> {
         try {
             client.user?.setPresence({
                 activities: [{
@@ -24,7 +31,7 @@ function ReadyEvent(client: ClientParams, config: any):void {
                     type: ActivityType.Streaming,
                     url: "https://www.twitch.tv/im_just_non",
                 }],
-                status: 'online' as PresenceStatusData,
+                status: PresenceUpdateStatus.Online,
             });
         } catch (e) {
             client.user?.setPresence({
@@ -33,7 +40,28 @@ function ReadyEvent(client: ClientParams, config: any):void {
                     type: ActivityType.Streaming,
                     url: "https://www.twitch.tv/im_just_non",
                 }],
-                status: 'online' as PresenceStatusData,
+                status: PresenceUpdateStatus.Online,
+            });
+        }
+    }
+    async function changeStatus2(): Promise<void> {
+        try {
+            client.user?.setPresence({
+                activities: [{
+                    name: `V.2.0.0 | Comming Soon...`,
+                    type: ActivityType.Streaming,
+                    url: "https://www.twitch.tv/im_just_non",
+                }],
+                status: PresenceUpdateStatus.Online
+            });
+        } catch (e) {
+            client.user?.setPresence({
+                activities: [{
+                    name: `V.2.0.0 | Comming Soon...`,
+                    type: ActivityType.Streaming,
+                    url: "https://www.twitch.tv/im_just_non",
+                }],
+                status: PresenceUpdateStatus.Online
             });
         }
     }
