@@ -5,14 +5,14 @@ import path from "path";
 import config from "../config/config";
 
 async function ApplicationCommandHandler(client: any): Promise<void> {
-    let commands: Array<object> = [];
+    let commands: object[] = [];
     let filesCount: number = 0;
 
-    const findCommandFolder: Array<string> = fs.readdirSync(path.join(__dirname, "../commands"));
+    const findCommandFolder: string[] = fs.readdirSync(path.join(__dirname, "../commands"));
 
     // Use a loop to handle async/await properly
     for (const foldername of findCommandFolder) {
-        const findFileInsideCommandFolder = fs.readdirSync(path.join(__dirname, "../commands", foldername));
+        const findFileInsideCommandFolder: string[] = fs.readdirSync(path.join(__dirname, "../commands", foldername));
         
         for (const file of findFileInsideCommandFolder) {
             const filePath = path.join(__dirname, "../commands", foldername, file);

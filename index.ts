@@ -37,6 +37,8 @@ const client: any = new Client({
     ],
 });
 
+// Main(client);
+
 client.commands = new Collection();
 client.modules = fs.readdirSync('./commands');
 
@@ -54,6 +56,6 @@ for (const file of filteredHanderFiles) {
 }
 
 client.login(config.client.token).then(() =>{
-    Main(client);
+    
 });
 

@@ -1,7 +1,8 @@
-import { Client, CommandInteraction, CommandInteractionOptionResolver, Interaction, InteractionResponse } from "discord.js";
+import { Client, CommandInteraction, CommandInteractionOption, CommandInteractionOptionResolver, Interaction, InteractionResponse } from "discord.js";
+import { ClientParams } from "./ClientTypes";
 
 interface CommandCallbackFunctionParams {
-    client: any;
+    client: ClientParams;
     interaction: CommandInteraction;
     config?: any;
     commandConfig: CommandConfig
@@ -13,8 +14,8 @@ interface CommandConfig {
     name: string
     description: string
     type: number
-    options: Array<object>
-    userPermissions: Array<string> | null
+    options: object[]
+    userPermissions: string[] | null
     developersOnly: boolean
     ownerOnly: boolean
     category: string

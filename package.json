@@ -22,6 +22,7 @@
     "moment-timezone": "^0.5.45",
     "morgan": "^1.10.0",
     "path": "^0.12.7",
+    "poru": "^5.2.0",
     "prisma": "^5.14.0",
     "shoukaku": "^4.0.1",
     "ts-node": "^10.9.2",

@@ -3,7 +3,24 @@ import path from "path";
 import { ClientParams } from "../types/ClientTypes";
 
 async function Loader(client: ClientParams): Promise<void> {
-    console.log("Loaded");
+    const findEventFile: string[] = fs.readdirSync(path.join(__dirname, "./events"));
+    const filteredEventFile: string[] = findEventFile.filter((filename: string) => filename.endsWith(".event.ts"));
+
+    let fileCount: number = 0;
+    
+    for(const file of filteredEventFile){
+        try {
+            const eventPath: string = path.join(__dirname, "./events", file);
+            const event = await import(eventPath);
+            event.default(client);
+            console.log(`[Nodes] Loaded Event : ${file}`);
+            fileCount++;
+        }
+        catch(e){
+            console.log(`[Nodes] Error to Load : ${file} : ERROR : ${e}`);
+        }
+    }
+    console.log(`[Nodes] Loaded Sussessful : ${fileCount}`);
 }
 
 export default Loader;
