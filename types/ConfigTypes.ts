@@ -1,3 +1,4 @@
+import { ColorResolvable } from "discord.js";
 import { NodeGroup } from "poru";
 
 type ServerConfig = {
@@ -16,6 +17,13 @@ type UsersConfig = {
 type APIConfig = {
     
 }
+type AssetsConfig = {
+    musicChannel: {
+        bannerUrl: string;
+        defaultUrl: string;
+        defaultColor: ColorResolvable;
+    }
+}
 
 interface Config {
     server: ServerConfig;
@@ -23,6 +31,7 @@ interface Config {
     nodes: NodeGroup[];
     users: UsersConfig;
     api: APIConfig;
+    assets: AssetsConfig;
 }
 
 export {

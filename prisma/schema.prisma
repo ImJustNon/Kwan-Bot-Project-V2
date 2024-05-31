@@ -10,8 +10,8 @@ generator client {
 
 datasource db {
   provider = "mysql"
-  url      = env("DATABASE_MYSQL_URL")
-  // shadowDatabaseUrl = env("DATABASE_MYSQL_SHADOW_URL")
+  url      = env("DATABASE_MYSQL_MAIN_URL")
+  shadowDatabaseUrl = env("DATABASE_MYSQL_SHADOW_URL")
 }
 
 model GuildAutoVoiceChannelCache {
@@ -45,8 +45,8 @@ model GuildDisableCommand {
 
 model GuildMusicChannel {
   id                    Int       @id @default(autoincrement())
-  guild_id              String   
-  channel_id            String    
+  guild_id              String    @unique
+  channel_id            String    @unique
   author_id             String
   content_banner_id     String
   content_queue_id      String

@@ -1,7 +1,7 @@
 import { Guild, GuildChannel, GuildMember, InteractionResponse } from "discord.js";
 import { CommandCallbackFunction, CommandCallbackFunctionParams, CommandConfig } from "../../types/CommandTypes";
 import { poru } from "../../music/poruPlayer";
-import { Player, Track } from "poru";
+import { Player, supportedPlatforms, Track } from "poru";
 
 const pingCommand: CommandConfig = {
     name: 'play',
@@ -15,16 +15,20 @@ const pingCommand: CommandConfig = {
             required: true,
         },
         {
-            name: 'source',
+            name: 'platform',
             description: 'เเหล่งที่มา เช่น Youtube',
             type: 3,
             choices: [
                 {
                     name: "Youtube",
-                    value: 'youtube',
+                    value: 'ytsearch',
+                },
+                {
+                    name: "Spotify",
+                    value: 'spsearch',
                 }
             ],
-            required: true,
+            required: false,
         },
     ],
     userPermissions: null,
@@ -33,7 +37,7 @@ const pingCommand: CommandConfig = {
     category: 'music',
     callback: async({ client, interaction, config }: CommandCallbackFunctionParams): Promise<any> => {
         const query: any = interaction.options.get('search')?.value;
-        const source: any = interaction.options.get('source')?.value;
+        const source: any = interaction.options.get('platform')?.value;
         const guild = client.guilds.cache.get(interaction.guildId ?? "") as Guild;
         const member = guild?.members.cache.get(interaction.member?.user.id ?? "") as GuildMember;
         const channel = member?.voice.channel as GuildChannel;
@@ -50,16 +54,13 @@ const pingCommand: CommandConfig = {
             return interaction.reply('⚠ | โปรดระบุเพลงที่ต้องการด้วยน่ะ');
         } 
 
-        let sourcePrefix: string = "";
-        if(source === "youtube"){
-            sourcePrefix = "ytsearch";
-        }
-
         const res = await poru?.resolve({
             query: query, 
-            source: sourcePrefix, 
+            source: source ?? "ytsearch", 
             requester: interaction.member 
         });
+
+        console.log(res)
 
         if (res?.loadType === "error") {
             return interaction.reply("Failed to load track.");

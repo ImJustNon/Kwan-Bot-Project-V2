@@ -55,7 +55,7 @@ async function InteractionCreateEvent(client: any): Promise<void>{
             catch(e){
                 console.error(`[Error] Failed to run the command \'${interaction.commandName}\'. Error : ${e}`);
                 return interaction.reply({
-                    content: `🔴 | โปรดลองใหม่ในภายหลังน่ะ`,
+                    content: `🔴 | ขณะนี้ไม่สามารถใช้คำสั่งนี้ได้ โปรดลองใหม่ในภายหลังน่ะ`,
                     ephemeral: true,
                 });
             }

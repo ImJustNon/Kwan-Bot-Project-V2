@@ -3,7 +3,8 @@ import { ClientParams } from '../types/ClientTypes';
 import config from '../config/config';
 import { Poru } from 'poru';
 
-let poru: Poru | null = null;
+
+let poru: Poru;
 
 async function PoruPlayer(client: ClientParams): Promise<void> {
     poru = new Poru(client, config.nodes, {
@@ -12,7 +13,8 @@ async function PoruPlayer(client: ClientParams): Promise<void> {
         resumeKey: "reirin",
         resumeTimeout: 60 * 1000,
         reconnectTries: 5,
-        autoResume: true
+        autoResume: true,
+        plugins: []
     }) as Poru;
 }
 

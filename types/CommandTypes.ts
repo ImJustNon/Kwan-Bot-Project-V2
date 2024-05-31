@@ -15,7 +15,7 @@ interface CommandConfig {
     description: string
     type: number
     options: object[]
-    userPermissions: string[] | null
+    userPermissions: bigint[] | null
     developersOnly: boolean
     ownerOnly: boolean
     category: string
