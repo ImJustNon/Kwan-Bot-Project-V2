@@ -3,6 +3,9 @@ import { ClientParams } from "../../../types/ClientTypes";
 import { Prisma, PrismaClient } from "@prisma/client";
 import { poru } from "../../../music/poruPlayer";
 import { Player } from "poru";
+import trackEmbed from "../utils/trackEmbed";
+import queueMessage from "../utils/queueMessage";
+
 
 const prisma: PrismaClient = new PrismaClient(); 
 
@@ -81,30 +84,154 @@ async function InteractionCreateEvent(client: ClientParams){
         const trackContent = await interaction.channel.messages.fetch(getMusicChannelData.content_playing_id);
         const queueContent = await interaction.channel.messages.fetch(getMusicChannelData.content_queue_id);
 
+
         console.log(buttonInteraction.customId);
         if(buttonInteraction.customId === 'music_pause'){
-
+            if(!player.isPaused){
+                await player.pause(true);
+                await commandInteraction.reply('🟢 | ทำการหยุดเพลงชั่วคราวเรียบร้อยเเล้วค่ะ').then(async(): Promise<void> => { 
+                    setTimeout(async() =>{
+                        await commandInteraction.deleteReply();
+                    }, 5000);
+                });
+            }
+            else if(player.isPaused){
+                await player.pause(false);
+                await commandInteraction.reply('🟢 | ทำการเล่นเพลงต่อเเล้วค่ะ').then(async(): Promise<void> => { 
+                    setTimeout(async() =>{
+                        await commandInteraction.deleteReply();
+                    }, 5000); 
+                });
+            } 
         }
         else if(buttonInteraction.customId === 'music_skip'){
-
+            await player.skip();
+            await commandInteraction.reply('🟢 | ทำการข้ามเพลงให้เรียบร้อยเเล้วค่ะ').then(async(): Promise<void> => { 
+                setTimeout(async() =>{
+                    await commandInteraction.deleteReply();
+                }, 5000); 
+            });
         }
         else if(buttonInteraction.customId === 'music_stop'){
-
+            if(player.isPlaying){
+                player.destroy();
+                await commandInteraction.reply('🟢 | ทำการปิดเพลงเรียบร้อยเเล้วค่ะ').then(async(): Promise<void> => { 
+                    setTimeout(async() =>{
+                        await commandInteraction.deleteReply();
+                    }, 5000); 
+                });
+            }
         }
         else if(buttonInteraction.customId === 'music_loop'){
-
+            if(player.loop === "NONE"){
+                player.setLoop("QUEUE");
+                await commandInteraction.reply(`🟢 | ทำการเปิดการวนซ้ำเพลงเเบบ \`ทั้งหมด\` เรียบร้อยเเล้วค่ะ`).then(async(): Promise<void> =>{ 
+                    await trackContent.edit({ 
+                        embeds: [await trackEmbed(client, player)]
+                    });
+                    setTimeout(async() =>{
+                        await commandInteraction.deleteReply();
+                    }, 5000); 
+                });
+            }
+            else if(player.loop === "QUEUE"){
+                player.setLoop("TRACK");
+                await commandInteraction.reply(`🟢 | ทำการเปิดการวนซ้ำเพลงเเบบ \`เพลงเดียว\` เรียบร้อยเเล้วค่ะ`).then(async(): Promise<void> =>{ 
+                    await trackContent.edit({ 
+                        embeds: [await trackEmbed(client, player)]
+                    });
+                    setTimeout(async() =>{
+                    await commandInteraction.deleteReply();
+                    }, 5000); 
+                });
+            }
+            else if(player.loop === "TRACK"){
+                player.setLoop("NONE");
+                await commandInteraction.reply(`🟢 | ทำการปิดวนซ้ำเพลงเรียบร้อยเเล้วค่ะ`).then(async(): Promise<void> =>{ 
+                    await trackContent.edit({
+                        embeds: [await trackEmbed(client, player)]
+                    });
+                    setTimeout(async() =>{
+                        await commandInteraction.deleteReply();
+                    }, 5000); 
+                });
+            }
         }
         else if(buttonInteraction.customId === 'music_shuffle'){
-
+            if(!player.queue || !player.queue.length || player.queue.length == 0){
+                await commandInteraction.reply('🟡 | เอ๊ะ! ดูเหมือนว่าคิวของคุณจะไม่มีความยาวมากพอน่ะคะ').then(async(): Promise<void> =>{ 
+                    setTimeout(async() =>{
+                        await commandInteraction.deleteReply();
+                    }, 5000); 
+                });
+            }
+            else{
+                player.queue.shuffle();
+                await commandInteraction.reply('🟢 | ทำการสุ่มเรียงรายการคิวใหม่เรียบร้อยเเล้วค่ะ').then(async(): Promise<void> =>{ 
+                    await queueContent.edit({ content: await queueMessage(client, player)});
+                    setTimeout(async() =>{
+                        await commandInteraction.deleteReply();
+                    }, 5000); 
+                });
+            }
         }
         else if(buttonInteraction.customId === 'music_volup'){
-
+            let newVol: number = player.volume + 10;
+            if(newVol < 110){
+                await player.setVolume(newVol);
+                await commandInteraction.reply(`🟢 | ทำการปรับความดังเสียงเป็น \`${newVol}\` เรียบร้อยเเล้วค่ะ`).then(async(): Promise<void> =>{ 
+                    await trackContent.edit({ embeds: [ await trackEmbed(client, player) ]});
+                    setTimeout(async() =>{
+                        await commandInteraction.deleteReply();
+                    }, 5000); 
+                });
+            }
+            else if(newVol >= 110){
+                await commandInteraction.reply(`🟡 | ไม่สามารถปรับความดังเสียงได้มากกว่านี้เเล้วค่ะ`).then(async(): Promise<void> =>{ 
+                    setTimeout(async() =>{
+                        await commandInteraction.deleteReply();
+                    }, 5000); 
+                });
+            }
         }
         else if(buttonInteraction.customId === 'music_voldown'){
-
+            let newVol: number = player.volume - 10;
+            if(newVol > 0){
+                await player.setVolume(newVol);
+                await commandInteraction.reply(`🟢 | ทำการปรับความดังเสียงเป็น \`${newVol}\` เรียบร้อยเเล้วค่ะ`).then(async(): Promise<void> =>{ 
+                    await trackContent.edit({ embeds: [ await trackEmbed(client, player) ]});
+                    setTimeout(async() =>{
+                        await commandInteraction.deleteReply();
+                    }, 5000); 
+                });
+            }   
+            else if(newVol < 0){
+                await commandInteraction.reply(`🟡 | ไม่สามารถปรับความดังเสียงได้น้อยกว่านี้เเล้วค่ะ`).then(async(): Promise<void> =>{ 
+                    setTimeout(async() =>{
+                        await commandInteraction.deleteReply();
+                    }, 5000); 
+                });
+            } 
         }
         else if(buttonInteraction.customId === 'music_mute'){
-
+            if(player.volume > 0){
+                player.setVolume(0);
+                await commandInteraction.reply(`🟢 | ทำการปิดเสียงเรียบร้อยเเล้วค่ะ`).then(async(): Promise<void> =>{ 
+                    await trackContent.edit({ embeds: [ await trackEmbed(client, player) ]});
+                    setTimeout(async() =>{
+                        await commandInteraction.deleteReply();
+                    }, 5000); 
+                });
+            }
+            else if(player.volume === 0){
+                player.setVolume(80);
+                await commandInteraction.reply(`🟢 | ทำการเปิดเสียงเรียบร้อยเเล้วค่ะ`).then(async(): Promise<void> =>{ 
+                    await trackContent.edit({ embeds: [ await trackEmbed(client, player) ]});
+                    setTimeout(async() =>{
+                        await commandInteraction.deleteReply();
+                    }, 5000); 
+                });
+            }
         }
     });
 }
