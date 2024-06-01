@@ -4,7 +4,7 @@ import path from "path";
 import config from "./config/config";
 
 
-const manager: ShardingManager = new ShardingManager(path.join(__dirname, './index.ts'), {
+const manager: ShardingManager = new ShardingManager("./index.ts", {
   token: config.client.token,
   totalShards: 'auto', 
 });
