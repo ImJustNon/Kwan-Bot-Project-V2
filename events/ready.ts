@@ -48,7 +48,7 @@ function ReadyEvent(client: ClientParams, config: any):void {
         try {
             client.user?.setPresence({
                 activities: [{
-                    name: `V.2.0.0 | Comming Soon...`,
+                    name: `V.2.0.0 | Coming Soon...`,
                     type: ActivityType.Streaming,
                     url: "https://www.twitch.tv/im_just_non",
                 }],
@@ -57,7 +57,7 @@ function ReadyEvent(client: ClientParams, config: any):void {
         } catch (e) {
             client.user?.setPresence({
                 activities: [{
-                    name: `V.2.0.0 | Comming Soon...`,
+                    name: `V.2.0.0 | Coming Soon...`,
                     type: ActivityType.Streaming,
                     url: "https://www.twitch.tv/im_just_non",
                 }],

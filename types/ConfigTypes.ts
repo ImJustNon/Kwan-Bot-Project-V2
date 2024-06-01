@@ -5,6 +5,7 @@ type ServerConfig = {
     port: number;
 }
 type ClientConfig = {
+    sharding: boolean;
     token: string;
     id: string;
     secret: string;

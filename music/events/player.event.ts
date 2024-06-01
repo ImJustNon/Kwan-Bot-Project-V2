@@ -4,13 +4,13 @@ import { poru } from "../poruPlayer";
 
 function PlayerEvent(client: ClientParams): void {
     poru?.on("playerCreate", (player: Player) =>{
-        console.log("playerCreate");
+        // console.log("playerCreate");
     });
     poru?.on("playerUpdate", (player: Player) =>{
-        console.log("playerUpdate");
+        // console.log("playerUpdate");
     });
     poru?.on("playerDestroy", (player: Player) =>{
-        console.log("playerDestroy");
+        // console.log("playerDestroy");
     });
 }
 

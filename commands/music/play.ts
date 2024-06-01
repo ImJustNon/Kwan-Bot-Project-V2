@@ -60,8 +60,6 @@ const pingCommand: CommandConfig = {
             requester: interaction.member 
         });
 
-        console.log(res)
-
         if (res?.loadType === "error") {
             return interaction.reply("Failed to load track.");
         } else if (res?.loadType === "empty") {

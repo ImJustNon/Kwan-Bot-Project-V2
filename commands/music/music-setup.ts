@@ -83,7 +83,7 @@ const musicSetupCommand: CommandConfig = {
                     await prisma.guildMusicChannel.create({
                         data: {
                             guild_id: interaction.guild?.id as string,
-                            channel_id: interaction.channel?.id as string,
+                            channel_id: channelId,
                             author_id: interaction.user.id,
                             content_banner_id: contentBannerId,
                             content_queue_id: contentqueueId,

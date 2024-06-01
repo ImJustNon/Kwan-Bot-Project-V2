@@ -20,7 +20,7 @@ async function Loader(client: ClientParams): Promise<void> {
             console.log(`[Nodes] Error to Load : ${file} : ERROR : ${e}`);
         }
     }
-    console.log(`[Nodes] Loaded Sussessful : ${fileCount}`);
+    console.log(`[Nodes] Loaded Successful : ${fileCount}`);
 }
 
 export default Loader;
