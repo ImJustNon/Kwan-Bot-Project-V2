@@ -114,7 +114,7 @@ async function InteractionCreateEvent(client: ClientParams){
         }
         else if(buttonInteraction.customId === 'music_stop'){
             if(player.isPlaying){
-                player.destroy();
+                await player.destroy();
                 await commandInteraction.reply('🟢 | ทำการปิดเพลงเรียบร้อยเเล้วค่ะ').then(async(): Promise<void> => { 
                     setTimeout(async() =>{
                         await commandInteraction.deleteReply();
@@ -124,7 +124,7 @@ async function InteractionCreateEvent(client: ClientParams){
         }
         else if(buttonInteraction.customId === 'music_loop'){
             if(player.loop === "NONE"){
-                player.setLoop("QUEUE");
+                await player.setLoop("QUEUE");
                 await commandInteraction.reply(`🟢 | ทำการเปิดการวนซ้ำเพลงเเบบ \`ทั้งหมด\` เรียบร้อยเเล้วค่ะ`).then(async(): Promise<void> =>{ 
                     await trackContent.edit({ 
                         embeds: [await trackEmbed(client, player)]
@@ -135,7 +135,7 @@ async function InteractionCreateEvent(client: ClientParams){
                 });
             }
             else if(player.loop === "QUEUE"){
-                player.setLoop("TRACK");
+                await player.setLoop("TRACK");
                 await commandInteraction.reply(`🟢 | ทำการเปิดการวนซ้ำเพลงเเบบ \`เพลงเดียว\` เรียบร้อยเเล้วค่ะ`).then(async(): Promise<void> =>{ 
                     await trackContent.edit({ 
                         embeds: [await trackEmbed(client, player)]
@@ -146,7 +146,7 @@ async function InteractionCreateEvent(client: ClientParams){
                 });
             }
             else if(player.loop === "TRACK"){
-                player.setLoop("NONE");
+                await player.setLoop("NONE");
                 await commandInteraction.reply(`🟢 | ทำการปิดวนซ้ำเพลงเรียบร้อยเเล้วค่ะ`).then(async(): Promise<void> =>{ 
                     await trackContent.edit({
                         embeds: [await trackEmbed(client, player)]
@@ -166,7 +166,7 @@ async function InteractionCreateEvent(client: ClientParams){
                 });
             }
             else{
-                player.queue.shuffle();
+                await player.queue.shuffle();
                 await commandInteraction.reply('🟢 | ทำการสุ่มเรียงรายการคิวใหม่เรียบร้อยเเล้วค่ะ').then(async(): Promise<void> =>{ 
                     await queueContent.edit({ content: await queueMessage(client, player)});
                     setTimeout(async() =>{
@@ -215,7 +215,7 @@ async function InteractionCreateEvent(client: ClientParams){
         }
         else if(buttonInteraction.customId === 'music_mute'){
             if(player.volume > 0){
-                player.setVolume(0);
+                await player.setVolume(0);
                 await commandInteraction.reply(`🟢 | ทำการปิดเสียงเรียบร้อยเเล้วค่ะ`).then(async(): Promise<void> =>{ 
                     await trackContent.edit({ embeds: [ await trackEmbed(client, player) ]});
                     setTimeout(async() =>{
@@ -224,7 +224,7 @@ async function InteractionCreateEvent(client: ClientParams){
                 });
             }
             else if(player.volume === 0){
-                player.setVolume(80);
+                await player.setVolume(80);
                 await commandInteraction.reply(`🟢 | ทำการเปิดเสียงเรียบร้อยเเล้วค่ะ`).then(async(): Promise<void> =>{ 
                     await trackContent.edit({ embeds: [ await trackEmbed(client, player) ]});
                     setTimeout(async() =>{
