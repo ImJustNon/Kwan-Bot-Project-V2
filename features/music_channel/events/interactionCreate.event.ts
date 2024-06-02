@@ -22,6 +22,8 @@ async function InteractionCreateEvent(client: ClientParams){
         if(!interaction.channel.name.includes("music") && !interaction.channel.name.includes(`${client.user?.username}-music`) && !interaction.channel.name.includes(`${client.user?.username}`)) return;
 
         
+
+        
         // check channel from database
         const getMusicChannelData = await prisma.guildMusicChannel.findUnique({
             where: {
@@ -85,7 +87,6 @@ async function InteractionCreateEvent(client: ClientParams){
         const queueContent = await interaction.channel.messages.fetch(getMusicChannelData.content_queue_id);
 
 
-        console.log(buttonInteraction.customId);
         if(buttonInteraction.customId === 'music_pause'){
             if(!player.isPaused){
                 await player.pause(true);

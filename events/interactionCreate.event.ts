@@ -1,5 +1,5 @@
 import config from "../config/config";
-import { Client, Interaction, InteractionType } from "discord.js";
+import { Channel, Client, Interaction, InteractionType, TextBasedChannel, TextChannel } from "discord.js";
 import { CommandConfig } from "../types/CommandTypes";
 import { ClientParams } from "../types/ClientTypes";
 import { PrismaClient } from "@prisma/client";
@@ -56,17 +56,21 @@ async function InteractionCreateEvent(client: ClientParams): Promise<void>{
                     //     }
                     // }
 
-                    // check for if music channel will return 
-                    const isMusicChannel = await prisma.guildMusicChannel.findUnique({
-                        where: {
-                            guild_id: interaction.guild.id,
-                            channel_id: interaction.channelId
-                        } ,
-                        select: {
-                            id: true
-                        }
-                    });
-                    if(isMusicChannel) throw Error ;
+                    /// filter channel from name if not similar with music channel then ignore
+                    const textChannel: TextChannel = client.channels.cache.get(interaction.channelId) as TextChannel;
+                    if(textChannel.name.includes("music") || textChannel.name.includes(`${client.user?.username}-music`) || textChannel.name.includes(`${client.user?.username}`)) {
+                        // check for if music channel will throw error 
+                        const isMusicChannel = await prisma.guildMusicChannel.findUnique({
+                            where: {
+                                guild_id: interaction.guild.id,
+                                channel_id: interaction.channelId
+                            } ,
+                            select: {
+                                id: true
+                            }
+                        });
+                        if(isMusicChannel) throw Error ;
+                    }
 
                     await command.callback({client, interaction, config, commandConfig: command});
                 }

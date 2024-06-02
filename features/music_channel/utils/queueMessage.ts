@@ -14,8 +14,6 @@ async function queueMessage(client: ClientParams, player: Player){
         finalQueueMessage = defaultQueueMessage;
     }
 
-    console.log(finalQueueMessage.length, finalQueueMessage);
-
     if(finalQueueMessage.length === 0){
         return finalQueueMessage = defaultQueueMessage + "ยังไม่รายการคิว";
     }
