@@ -15,7 +15,7 @@ async function InteractionCreateEvent(client: ClientParams){
         const commandInteraction: CommandInteraction = interaction as CommandInteraction;
 
         // check is button interaction 
-        if(!interaction.isButton) return;
+        if(!interaction.isButton()) return;
 
         // filter channel from name
         if(!(interaction.channel instanceof TextChannel)) return;
