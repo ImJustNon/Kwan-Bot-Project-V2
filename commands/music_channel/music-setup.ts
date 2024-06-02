@@ -16,7 +16,7 @@ const musicSetupCommand: CommandConfig = {
     userPermissions: [PermissionsBitField.Flags.Administrator],
     developersOnly: false,
     ownerOnly: false,
-    category: 'music',
+    category: 'music_channel',
     callback: async({ client, interaction }: CommandCallbackFunctionParams): Promise<any> => {
         await interaction.reply({
             content: "⌛ | กำลังตั้งค่าห้องเล่นเพลง กรุณารอซักครู่น่ะ",
