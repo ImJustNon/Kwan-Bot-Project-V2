@@ -8,8 +8,19 @@ import { CommandConfig } from "./types/CommandTypes";
 import StartPlayer from "./music/main";
 import "@discordjs/voice";
 import { poru } from "./music/poruPlayer";
+import express from "express";
+import { Express } from 'express';
+import morgan from "morgan";
+import cors from "cors";
+import bodyParser from "body-parser";
+import cookieParser from "cookie-parser";
+import AppRouter from "./api/routes/appRouter";
+import setupWebSocket from './api/websocket/wss';
+import { createServer } from 'http';
 
 dotenv.config();
+
+const app: Express = express();
 
 const client: any = new Client({ 
     intents: [
@@ -47,9 +58,19 @@ client.ws.shards.forEach((shard: WebSocketShard) => {
   shard.setMaxListeners(20);
 });
 
-export {
-    client
-}
+
+app.use(cors());
+app.use(cookieParser());
+app.use(morgan("dev"));
+app.use(bodyParser.urlencoded({
+    limit: "50mb",
+    extended: false,
+}));
+app.use(express.json({
+    limit: "50mb",
+}));
+app.use("/", AppRouter(client));
+
 
 const findHandlerFiles: string[] = fs.readdirSync(path.join(__dirname, "./handlers"))
 const filteredHanderFiles: string[] = findHandlerFiles.filter((filename: string) => filename.endsWith(".ts"));
@@ -60,7 +81,20 @@ for (const file of filteredHanderFiles) {
     });
 }
 
+
+
+const server = createServer(app);
+
+// client login
 client.login(config.client.sharding ? undefined : config.client.token).then(async() =>{
     await StartPlayer(client);
+    // app start port
+    server.listen(config.server.port, (): void =>{
+        console.log(`> Listening on port : ${config.server.port}`);
+    });
+    // Set up the WebSocket server
+    setupWebSocket(server, client);
 });
+
+
 

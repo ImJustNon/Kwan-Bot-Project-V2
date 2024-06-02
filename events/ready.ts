@@ -18,9 +18,6 @@ function ReadyEvent(client: ClientParams, config: any):void {
 
         // init poru
         await poru?.init();
-
-        const serverPath = path.join(__dirname, "../api", "app.ts");
-        await import(serverPath);
     });
     
     async function changeStatus(): Promise<void> {
