@@ -8,7 +8,7 @@ const config: Config = {
         port: parseInt(process.env.SERVER_PORT || "")
     },
     client: {
-        sharding: true,
+        sharding: process.env.MODE === "development" ? false : true,
         token: process.env.CLIENT_TOKEN || "",
         id: process.env.CLIENT_ID || "",
         secret: process.env.CLIENT_SECRET || "",

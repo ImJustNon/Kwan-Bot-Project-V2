@@ -47,6 +47,7 @@
   "scripts": {
     "build": "npx tsc",
     "start": "node ./dist/index.js",
+    "start:shard": "node ./dist/shard.js",
     "dev": "nodemon ./index.ts",
     "prisma:migrate": "npx prisma migrate dev",
     "prisma:studio": "npx prisma studio"
