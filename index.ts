@@ -73,11 +73,12 @@ app.use("/", AppRouter(client));
 
 
 const findHandlerFiles: string[] = fs.readdirSync(path.join(__dirname, "./handlers"))
-const filteredHanderFiles: string[] = findHandlerFiles.filter((filename: string) => filename.endsWith(".ts"));
+const filteredHanderFiles: string[] = findHandlerFiles.filter((filename: string) => filename.includes(".handler."));
 for (const file of filteredHanderFiles) {
     const filePath = path.join(__dirname, "./handlers", file);
     import(filePath).then(async fileData => {
         await fileData.default(client, config);
+        console.log(`[Handler-Loader] Loaded : `, file)
     });
 }
 

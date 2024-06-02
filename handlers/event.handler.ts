@@ -7,7 +7,7 @@ import { ClientParams } from '../types/ClientTypes';
 
 async function EventHander(client: ClientParams, config: any): Promise<void> {
     const eventsPath: string = path.join(__dirname, '../events');
-    const files: Array<string> = fs.readdirSync(eventsPath).filter((file: string) => file.endsWith('.ts'));
+    const files: string[] = fs.readdirSync(eventsPath).filter((file: string) => file.includes('.event.'));
     let filesCount: number = 0;
 
     

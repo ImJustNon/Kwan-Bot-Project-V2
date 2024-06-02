@@ -4,7 +4,7 @@ import path from "path";
 
 async function Main(client: ClientParams): Promise<void> {
     const eventFiles: string[] = fs.readdirSync(path.join(__dirname, "./events"));
-    const filterEventFiles: string[] = eventFiles.filter((filename: string) => filename.endsWith(".event.ts"));
+    const filterEventFiles: string[] = eventFiles.filter((filename: string) => filename.includes(".event."));
     let loadedCount: number = 0;
 
     for(const file of filterEventFiles){

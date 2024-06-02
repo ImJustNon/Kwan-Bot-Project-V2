@@ -4,7 +4,7 @@ import { ClientParams } from "../types/ClientTypes";
 
 async function Loader(client: ClientParams): Promise<void> {
     const findEventFile: string[] = fs.readdirSync(path.join(__dirname, "./events"));
-    const filteredEventFile: string[] = findEventFile.filter((filename: string) => filename.endsWith(".event.ts"));
+    const filteredEventFile: string[] = findEventFile.filter((filename: string) => filename.includes(".event."));
 
     let fileCount: number = 0;
     
