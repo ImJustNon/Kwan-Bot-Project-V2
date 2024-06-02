@@ -1,5 +1,5 @@
 import config from "../config/config";
-import { Channel, Client, Interaction, InteractionType, TextBasedChannel, TextChannel } from "discord.js";
+import { Channel, Client, Interaction, InteractionType, PermissionsBitField, TextBasedChannel, TextChannel } from "discord.js";
 import { CommandConfig } from "../types/CommandTypes";
 import { ClientParams } from "../types/ClientTypes";
 import { PrismaClient } from "@prisma/client";
@@ -21,13 +21,15 @@ async function InteractionCreateEvent(client: ClientParams): Promise<void>{
                     });
                 }
 
-                try{  
+                try{   
                     if (command.ownerOnly && command.ownerOnly === true) {
-                        if (config.users.owners.includes(interaction.user.id)) {
-                            return interaction.reply({
-                                content: `❌ | คำสั่งนี้สามารถสำหรับ Owner เท่านั้น`,
-                                ephemeral: true,
-                            });
+                        if (config.users.owners && config.users.owners.length > 0) {
+                            if (!config.users.owners.some((owner) => interaction.user.id === owner)) {
+                                return interaction.reply({
+                                    content: `❌ | คำสั่งนี้สามารถสำหรับ Owner เท่านั้น`,
+                                    ephemeral: true,
+                                });
+                            }
                         }
                     }
 
@@ -42,19 +44,17 @@ async function InteractionCreateEvent(client: ClientParams): Promise<void>{
                         }
                     }
 
-                    // if (command.userPermissions && command.userPermissions !== null) {
-                    //     if (Array.isArray(command.userPermissions)) {
-                    //         if (command.userPermissions.length > 0) {
-                    //             const checkPerms = interaction.member?.permissions.has(command.userPermissions);
-                    //             if (!checkPerms){
-                    //                 return interaction.reply({
-                    //                     content: `❌ | คุณไม่มีสิทธิใช้คำสั่งนี้น่ะ`,
-                    //                     ephemeral: true,
-                    //                 });
-                    //             }
-                    //         }
-                    //     }
-                    // }
+                    if (command.userPermissions && Array.isArray(command.userPermissions) && command.userPermissions.length > 0) {
+                        const memberPermissions: Readonly<PermissionsBitField> = interaction.member?.permissions as Readonly<PermissionsBitField>;
+                        const requiredPermissions: PermissionsBitField = new PermissionsBitField(command.userPermissions);
+                        const hasPermissions: boolean = memberPermissions?.has(requiredPermissions);
+                        if (!hasPermissions) {
+                            return interaction.reply({
+                                content: `❌ | คุณไม่มีสิทธิใช้คำสั่งนี้น่ะ`,
+                                ephemeral: true,
+                            });
+                        }
+                    }
 
                     /// filter channel from name if not similar with music channel then ignore
                     const textChannel: TextChannel = client.channels.cache.get(interaction.channelId) as TextChannel;

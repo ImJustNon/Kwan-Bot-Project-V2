@@ -16,7 +16,7 @@ const musicSetupCommand: CommandConfig = {
     options: [],
     userPermissions: [PermissionsBitField.Flags.Administrator],
     developersOnly: false,
-    ownerOnly: false,
+    ownerOnly: true,
     category: 'music_channel',
     callback: async({ client, interaction }: CommandCallbackFunctionParams): Promise<any> => {
         const findMusicChannel = await prisma.guildMusicChannel.findUnique({
