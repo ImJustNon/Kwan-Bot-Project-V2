@@ -3,10 +3,10 @@ import { Client, Interaction, InteractionType } from "discord.js";
 import { CommandConfig } from "../types/CommandTypes";
 import { ClientParams } from "../types/ClientTypes";
 
-async function InteractionCreateEvent(client: any): Promise<void>{
+async function InteractionCreateEvent(client: ClientParams): Promise<void>{
     client.on('interactionCreate', async (interaction: Interaction)  => {
         if(interaction.isChatInputCommand()){
-            const command: CommandConfig = await client.commands.get(interaction.commandName);
+            const command: CommandConfig | undefined = client.commands.get(interaction.commandName);
             
             if(!command){
                 return interaction.reply({

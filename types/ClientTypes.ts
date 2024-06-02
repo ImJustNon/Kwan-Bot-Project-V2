@@ -1,9 +1,9 @@
 import { Client, Collection } from "discord.js";
-import { CommandConfig } from "./CommandTypes";
+import { CommandConfig, CommandsCollection } from "./CommandTypes";
 
 interface ClientParams extends Client {
-    commands: CommandConfig[]
-    modules: string[]
+    commands: CommandsCollection;
+    modules: string[];
 }
 
 export {
