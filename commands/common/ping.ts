@@ -15,7 +15,7 @@ const pingCommand: CommandConfig = {
         const { client, interaction, config } = params;
         console.log(interaction.member);
         return interaction.reply({
-            content: '`🏓` Pong! Lantency: ' + client.ws.ping + 'ms'
+            content: '`🏓` Pong! Lantency: ' + client.ws.ping + 'ms',
         });
     }
 };
