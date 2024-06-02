@@ -5,7 +5,7 @@ import { Interaction } from "discord.js";
 import fs from "fs";
 import path from "path";
 import { CommandConfig } from "./types/CommandTypes";
-import StartPlayer from "./music/main";
+import setupPlayer from "./music/main";
 import "@discordjs/voice";
 import { poru } from "./music/poruPlayer";
 import express from "express";
@@ -88,14 +88,35 @@ const server = createServer(app);
 
 // client login
 client.login(config.client.sharding ? undefined : config.client.token).then(async() =>{
-    await StartPlayer(client);
+    // Set up the Player
+    await setupPlayer(client, () =>{
+        console.log(`> Music Player : Started`);
+    });
     // app start port
     server.listen(config.server.port, (): void =>{
-        console.log(`> Listening on port : ${config.server.port}`);
+        console.log(`> RestAPI Listening on : http://127.0.0.1:${config.server.port}`);
     });
     // Set up the WebSocket server
-    setupWebSocket(server, client);
+    await setupWebSocket(server, client, (): void =>{
+        console.log(`> Websocket Listening on : ws://127.0.0.1:${config.server.port}`);
+    });
 });
+
+// (async(): Promise<void> =>{
+//     // Set up the Player
+//     await setupPlayer(client, () =>{
+//         console.log(`> Music Player : Started`);
+//     });
+//     // app start port
+//     server.listen(config.server.port, (): void =>{
+//         console.log(`> RestAPI Listening on : http://127.0.0.1:${config.server.port}`);
+//     });
+//     // Set up the WebSocket server
+//     await setupWebSocket(server, client, (): void =>{
+//         console.log(`> Websocket Listening on : ws://127.0.0.1:${config.server.port}`);
+//     });
+//     await client.login(config.client.sharding ? undefined : config.client.token);
+// })();
 
 
 

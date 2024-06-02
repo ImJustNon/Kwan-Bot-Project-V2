@@ -3,10 +3,8 @@ import { ClientParams } from "../../types/ClientTypes"
 import { Server } from 'http';
 import config from '../../config/config';
 
-const setupWebSocket = (server: Server, client: ClientParams): WebSocketServer => {
+async function setupWebSocket(server: Server, client: ClientParams, callback: () => void): Promise<WebSocketServer> {
     const wss = new WebSocketServer({ server });
-
-    console.log(`> Websocket started on : ws://127.0.0.1:${config.server.port}`)
 
     wss.on('connection', (ws: WebSocket) => {
         console.log(`[Websocket] Client connected`)
@@ -21,6 +19,8 @@ const setupWebSocket = (server: Server, client: ClientParams): WebSocketServer =
             console.log('[Websocket] Client disconnected');
         });
     });
+
+    callback();
 
     return wss;
 };

@@ -1,8 +1,11 @@
 import { Player, Track, TrackEndEvent, TrackExceptionEvent, TrackStuckEvent } from "poru";
 import { ClientParams } from "../../types/ClientTypes";
 import { poru } from "../poruPlayer";
-import { Channel, EmbedBuilder, GuildChannel, GuildTextChannelType, TextChannel, VoiceChannel } from "discord.js";
+import { Channel, EmbedBuilder, Guild, GuildChannel, GuildTextChannelType, Message, TextChannel, VoiceChannel } from "discord.js";
 import { convertTime } from "../../utils/convertTime";
+import { Prisma, PrismaClient } from "@prisma/client";
+
+const prisma: PrismaClient = new PrismaClient();
 
 function TrackEvent(client: ClientParams): void {
 
@@ -43,20 +46,71 @@ function TrackEvent(client: ClientParams): void {
             ],
         });
     });
-    poru?.on("trackEnd", async(player: Player, track: Track, data: TrackEndEvent): Promise<void> =>{
-    });
     poru?.on("trackError", async(player: Player, track: Track, data: TrackStuckEvent | TrackExceptionEvent): Promise<void> =>{
     });
     poru?.on("queueEnd", async(player: Player): Promise<void> =>{
         const channel: TextChannel = client.channels.cache.get(player.textChannel) as TextChannel;
-        const msg = await channel.send({ 
-            embeds: [ 
-                new EmbedBuilder()
-                    .setColor("Random")
-                    .setTitle('💤 | คิวหมดเเล้วน่ะ'),
-            ] 
-        });
+        // const guild: Guild = client.guilds.cache.get(player.guildId) as Guild;
+        try {
+            const isMusicChannel = await prisma.guildMusicChannel.findUnique({
+                where: {
+                    guild_id: player.guildId,
+                    channel_id: player.textChannel
+                },
+                select: {
+                    id: true
+                }
+            });
+
+            // send queue end message
+            const msg: Message = await channel.send({ 
+                embeds: [ 
+                    new EmbedBuilder()
+                        .setColor("Random")
+                        .setTitle('💤 | คิวหมดเเล้วน่ะ'),
+                ] 
+            });
+
+            // if send in music channel will remove after 5 sec.
+            if(isMusicChannel){
+                setTimeout(async() => {
+                    await msg.delete();
+                }, 5000);
+            }
+        }
+        catch(e){
+            console.log("[Error] ", e);
+        }
+
         await player.destroy();
+    });
+
+    poru?.on("trackEnd", async(player: Player, track: Track, data: TrackEndEvent): Promise<void> =>{
+        try {
+            const isMusicChannel = await prisma.guildMusicChannel.findUnique({
+                where: {
+                    guild_id: player.guildId,
+                    channel_id: player.textChannel
+                },
+                select: {
+                    content_banner_id: true,
+                    content_queue_id: true,
+                    content_playing_id: true
+                }
+            });
+    
+            if(!isMusicChannel) return; // if isnt music channel will ignore
+    
+            const channel: TextChannel = client.channels.cache.get(player.textChannel) as TextChannel;
+            const bannerContent: Message = await channel.messages.fetch(isMusicChannel.content_banner_id);
+            const queueContent: Message = await channel.messages.fetch(isMusicChannel.content_queue_id);
+            const trackContent: Message = await channel.messages.fetch(isMusicChannel.content_playing_id);
+    
+            console.log(bannerContent, queueContent, trackContent);
+        }
+        catch(e){
+            console.log(`[Error] `, e)
+        }
     });
 }
 

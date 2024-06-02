@@ -43,6 +43,12 @@ const musicSetupCommand: CommandConfig = {
                     name: `${client.user?.username}-music`,
                     type: ChannelType.GuildText,
                     parent: null,
+                    permissionOverwrites: [
+                        {
+                            id: interaction.guild.id,
+                            deny: [PermissionsBitField.Flags.UseApplicationCommands]
+                        }
+                    ]
                 }).then(async(ch: TextChannel) =>{
                     const channelId: string = ch.id;
                     const authorId: string | undefined= interaction.member?.user.id;
