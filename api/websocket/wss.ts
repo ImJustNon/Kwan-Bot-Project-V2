@@ -6,12 +6,12 @@ import { poru } from "../../music/poruPlayer";
 import { Player } from 'poru';
 import { convertTime } from '../../utils/convertTime';
 
-async function setupWebSocket(server: Server, client: ClientParams, callback: () => void): Promise<WebSocketServer> {
-    const wss: WebSocketServer = new WebSocketServer({ server });
+async function setupWebSocket(wss: WebSocketServer, client: ClientParams, callback: () => void): Promise<WebSocketServer> {
+    
 
     wss.on('connection', (ws: WebSocket, req: IncomingMessage) => {
         console.log(`[Websocket] Client connected`);
-        console.log(req.url?.split("="));
+        // console.log(req.url?.split("="));
 
         poru.on("playerUpdate", async(player: Player): Promise<void> =>{
             ws.send(JSON.stringify({

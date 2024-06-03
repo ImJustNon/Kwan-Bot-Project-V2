@@ -16,12 +16,21 @@ import bodyParser from "body-parser";
 import cookieParser from "cookie-parser";
 import AppRouter from "./api/routes/appRouter";
 import setupWebSocket from './api/websocket/wss';
-import { createServer } from 'http';
+import { createServer, Server } from 'http';
+import { Server as SocketIOServer } from 'socket.io';
+import setupSocketIo from './api/socket.io/socket';
+// import WebSocket, { WebSocketServer } from 'ws';
 
 dotenv.config();
 
 const app: Express = express();
-const server = createServer(app);
+const server: Server = createServer(app);
+const io: SocketIOServer = new SocketIOServer(server);
+// const wss: WebSocketServer = new WebSocketServer({ 
+//     server: server, 
+//     path: "/ws" 
+// });
+
 
 const client: any = new Client({ 
     intents: [
@@ -99,26 +108,16 @@ client.login(config.client.sharding ? undefined : config.client.token).then(asyn
         console.log(`> RestAPI Listening on : http://127.0.0.1:${config.server.port}`);
     });
     // Set up the WebSocket server
-    await setupWebSocket(server, client, (): void =>{
-        console.log(`> Websocket Listening on : ws://127.0.0.1:${config.server.port}`);
+    // await setupWebSocket(wss, client, (): void =>{
+    //     console.log(`> Websocket Listening on : ws://127.0.0.1:${config.server.port}/ws`);
+    // });
+    // Setup the socket.io Server
+    await setupSocketIo(io, client, (): void =>{
+        console.log(`> Socket.io Listening on : ws://127.0.0.1:${config.server.port}${io.path()}`);
     });
 });
 
-// (async(): Promise<void> =>{
-//     // Set up the Player
-//     await setupPlayer(client, () =>{
-//         console.log(`> Music Player : Started`);
-//     });
-//     // app start port
-//     server.listen(config.server.port, (): void =>{
-//         console.log(`> RestAPI Listening on : http://127.0.0.1:${config.server.port}`);
-//     });
-//     // Set up the WebSocket server
-//     await setupWebSocket(server, client, (): void =>{
-//         console.log(`> Websocket Listening on : ws://127.0.0.1:${config.server.port}`);
-//     });
-//     await client.login(config.client.sharding ? undefined : config.client.token);
-// })();
+
 
 
 
