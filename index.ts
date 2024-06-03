@@ -21,6 +21,7 @@ import { createServer } from 'http';
 dotenv.config();
 
 const app: Express = express();
+const server = createServer(app);
 
 const client: any = new Client({ 
     intents: [
@@ -72,6 +73,7 @@ app.use(express.json({
 app.use("/", AppRouter(client));
 
 
+
 const findHandlerFiles: string[] = fs.readdirSync(path.join(__dirname, "./handlers"))
 const filteredHanderFiles: string[] = findHandlerFiles.filter((filename: string) => filename.includes(".handler."));
 for (const file of filteredHanderFiles) {
@@ -84,7 +86,7 @@ for (const file of filteredHanderFiles) {
 
 
 
-const server = createServer(app);
+
 
 // client login
 client.login(config.client.sharding ? undefined : config.client.token).then(async() =>{

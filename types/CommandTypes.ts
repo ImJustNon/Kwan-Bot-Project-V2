@@ -1,4 +1,4 @@
-import { Client, Collection, CommandInteraction, CommandInteractionOption, CommandInteractionOptionResolver, Interaction, InteractionResponse } from "discord.js";
+import { Client, Collection, CommandInteraction, CommandInteractionOption, CommandInteractionOptionResolver, Interaction, InteractionResponse, PermissionsBitField } from "discord.js";
 import { ClientParams } from "./ClientTypes";
 
 interface CommandCallbackFunctionParams {
