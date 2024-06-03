@@ -8,7 +8,7 @@ import { CommandConfig } from "./types/CommandTypes";
 import setupPlayer from "./music/main";
 import "@discordjs/voice";
 import { poru } from "./music/poruPlayer";
-import express from "express";
+import express, { Application } from "express";
 import { Express } from 'express';
 import morgan from "morgan";
 import cors from "cors";
@@ -23,13 +23,14 @@ import setupSocketIo from './api/socket.io/socket';
 
 dotenv.config();
 
-const app: Express = express();
+const app: Application = express();
 const server: Server = createServer(app);
 const io: SocketIOServer = new SocketIOServer(server);
 // const wss: WebSocketServer = new WebSocketServer({ 
 //     server: server, 
 //     path: "/ws" 
 // });
+
 
 
 const client: any = new Client({ 
@@ -89,10 +90,9 @@ for (const file of filteredHanderFiles) {
     const filePath = path.join(__dirname, "./handlers", file);
     import(filePath).then(async fileData => {
         await fileData.default(client, config);
-        console.log(`[Handler-Loader] Loaded : `, file)
+        console.log(`[Handler-Loader] Loaded : `, file);
     });
 }
-
 
 
 
