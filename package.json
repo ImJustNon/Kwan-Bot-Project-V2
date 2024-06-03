@@ -45,6 +45,7 @@
     "@types/socket.io": "^3.0.2",
     "@types/ws": "^8.5.10",
     "nodemon": "^3.1.1",
+    "rimraf": "^5.0.7",
     "ts-node": "^10.9.2",
     "typescript": "^5.4.5"
   },
@@ -54,6 +55,8 @@
     "start:shard": "node ./dist/shard.js",
     "dev": "nodemon ./index.ts",
     "prisma:migrate": "npx prisma migrate dev",
-    "prisma:studio": "npx prisma studio"
+    "prisma:studio": "npx prisma studio",
+    "clean-build": "rimraf dist",
+    "build:clean": "yarn clean-build && yarn build"
   }
 }
